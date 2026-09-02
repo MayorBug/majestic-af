@@ -1,0 +1,12 @@
+# Build output
+/build/
+/output/
+*.so
+*.o
+*.a
+
+# Editor / OS
+.cache/
+compile_commands.json
+*.swp
+.DS_Store
