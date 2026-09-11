@@ -72,6 +72,8 @@ and telemetry, but it does not select AF behavior.
 ## Documentation
 
 - [Blind-seek autofocus](docs/blind-seek-autofocus.md) describes the P035 path.
+- [Focus characterization](docs/focus-characterization.md) records repeatable lens sweeps.
+- [Future AF research](docs/future-af-research.md) lists experiments outside the current algorithm.
 - [P035 field notes](docs/hieasy-p035-field-notes.md) record the observed controller behavior.
 
 ## Status
