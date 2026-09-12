@@ -28,7 +28,9 @@ extern "C" {
 //   cmd = "autofocus", val in { "run", "settle", "status" }
 //       run     -> "started" | "restarted" | "busy"
 //       settle  -> same, run only after the pipeline is quiet
-//       status  -> "idle" | "running" | "done fv=... peak=... mag=... pos=..."
+//       status  -> state text followed by "metric_fv=... t_mono_ms=..."
+// The metric suffix contains a current ISP sample for read-only clients. The
+// state text stays first so clients can continue to match idle, running, or done.
 //   cmd = "zoom", val in { "tele", "wide", "stop" }
 //       tele/wide -> "zooming" | "unavailable"
 //       stop      -> "stopped"

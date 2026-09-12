@@ -80,7 +80,7 @@ static int af_zoom_req = 0;
 static char af_result[96] = "idle";
 // The HTTP caller needs a stable string after af_status() releases af_mu. Each caller gets its
 // own copy while the worker continues to publish measurements into af_result.
-static __thread char af_status_copy[96];
+static __thread char af_status_copy[160];
 
 static pthread_once_t af_algorithm_once = PTHREAD_ONCE_INIT;
 static enum AfAlgorithm af_algorithm = AF_ALGORITHM_INVALID;
@@ -163,6 +163,16 @@ const char *af_status(void) {
     pthread_mutex_lock(&af_mu);
     snprintf(af_status_copy, sizeof(af_status_copy), "%s", af_result);
     pthread_mutex_unlock(&af_mu);
+
+    /* Keep the state at the start of the response for existing clients. Add
+     * one current sample so read-only users, such as the WebUI graph, do not
+     * need the characterization marker or a second API. */
+    unsigned fv = 0;
+    if (sdk_get_focus_value(&fv)) {
+        size_t used = strlen(af_status_copy);
+        snprintf(af_status_copy + used, sizeof(af_status_copy) - used,
+                 " metric_fv=%u t_mono_ms=%ld", fv, now_ms());
+    }
     return af_status_copy;
 }
 
