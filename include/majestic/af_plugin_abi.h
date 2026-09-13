@@ -25,7 +25,7 @@ extern "C" {
 
 // One command per call. The two tokens mirror the legacy plugin_call shape so
 // the same entry can be driven over the TCP:4000 command server unchanged.
-//   cmd = "autofocus", val in { "run", "settle", "status" }
+//   cmd = "autofocus", val in { "run", "settle", "cancel", "status" }
 //       run     -> "started" | "restarted" | "busy"
 //       settle  -> same, run only after the pipeline is quiet
 //       status  -> state text followed by "metric_fv=... t_mono_ms=..."
@@ -34,6 +34,9 @@ extern "C" {
 //   cmd = "zoom", val in { "tele", "wide", "stop" }
 //       tele/wide -> "zooming" | "unavailable"
 //       stop      -> "stopped"
+//   cmd = "ptz", val = "" or "ACTION[:DURATION_MS]"
+//       empty     -> driver name and available axes
+//       action    -> left, right, up, down, tele, wide, near, far, or stop
 // Returns a pointer to storage that stays valid until the next call (static,
 // mutex-guarded inside the plugin); the caller must NOT free it. Returns NULL
 // for an unrecognised command.

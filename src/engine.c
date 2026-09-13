@@ -185,9 +185,8 @@ static long now_ms(void) {
 static void msleep(long ms) { usleep(ms * 1000); }
 
 // --- zoom magnification reader ----------------------------------------------
-// The motor service can provide optional magnification reports. The current
-// client protocol does not expose this telemetry yet. This engine caches each
-// received value for AF, the OSD `%@` token, and the `/zoom` status call.
+// The motor service provides optional magnification telemetry. This engine
+// caches each received value for AF, the OSD `%@` token, and `/zoom` status.
 
 static pthread_mutex_t af_zoom_mu = PTHREAD_MUTEX_INITIALIZER;
 static float af_zoom_value = -1.0f;
@@ -634,6 +633,18 @@ int af_cancel_pass(void) {
     if (active) snprintf(af_result, sizeof(af_result), "cancelling");
     pthread_mutex_unlock(&af_mu);
     return active ? 0 : 1;
+}
+
+void af_note_manual_focus(void) {
+    pthread_mutex_lock(&af_mu);
+    af_cancel = 1;
+    af_zoom_req = 0;
+    af_restart_pending = false;
+    af_restart_settle = false;
+    af_focus_pos = -1;
+    af_last_mag = -1.0f;
+    if (af_running_flag) snprintf(af_result, sizeof(af_result), "cancelling");
+    pthread_mutex_unlock(&af_mu);
 }
 
 int af_zoom_pulse(int dir) {

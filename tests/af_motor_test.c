@@ -122,6 +122,15 @@ bool motors_lease_revoked(const struct motors_client *client,
     return revoked;
 }
 
+bool motors_zoom_magnification(const struct motors_client *client,
+                               float *magnification,
+                               uint64_t *observed_mono_ms) {
+    (void)client;
+    (void)magnification;
+    (void)observed_mono_ms;
+    return false;
+}
+
 int motors_wait_movement(struct motors_client *client,
                          enum motors_client_axis axis, int timeout_ms,
                          uint64_t *completed_mono_ms,

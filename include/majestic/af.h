@@ -19,6 +19,9 @@ int af_trigger(bool settle);
  * or -1 if AF is unavailable. */
 int af_cancel_pass(void);
 
+/* Cancel AF and discard dead-reckoned focus position after manual focus. */
+void af_note_manual_focus(void);
+
 /* "idle", "running", or the last pass's one-line result. */
 const char *af_status(void);
 
